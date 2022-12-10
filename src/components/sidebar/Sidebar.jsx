@@ -7,13 +7,24 @@ import {
   MdPowerSettingsNew,
   MdSpaceDashboard,
 } from "react-icons/md";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
+import { useAuth, useAuthActions } from "../Provider/UserProvider/AuthrProvider";
 
 const Sidebar = () => {
+  const auth= useAuth();
+  const setAuth=useAuthActions();
+  const navigate= useNavigate();
+  const logOutHandler=()=>{
+if(auth){
+  localStorage.removeItem('auth');
+  setAuth(false);
+  navigate("/login");
+}
+  }
   const menuItems = [
     {
       title: "داشبورد",
-      to: "/",
+      to: "dashboard",
       icon: <MdSpaceDashboard />,
     },
     {
@@ -21,18 +32,14 @@ const Sidebar = () => {
       icon: <MdPeople />,
       iconTwo: <MdExpandMore size={25} />,
       submenu: [
-        { title: "همه کاربران", icon: <MdPeople />, to: "/users" },
-        { title: "افزودن", icon: <MdPersonAddAlt1 />,to:"/newuser" },
+        { title: "همه کاربران", icon: <MdPeople />, to: "users" },
+        { title: "افزودن", icon: <MdPersonAddAlt1 />, to: "newuser" },
       ],
     },
     {
       title: "سهام دارن",
       icon: <MdGroups />,
-      to:"shareholders",
-    },
-    {
-      title: "خروج",
-      icon: <MdPowerSettingsNew />,
+      to: "shareholders",
     },
   ];
 
@@ -45,6 +52,14 @@ const Sidebar = () => {
               return <MenuItems items={menu} key={index} />;
             })}
           </ul>
+          <button className="flex items-center justify-between cursor-pointer  mb-5" onClick={logOutHandler}>
+            <div className="flex gap-4">
+              <div className=" w-8 h-8 rounded-1 flex items-center justify-center shadow-[0_3px_6px_rgb(83,108,167,0.16);]">
+                <MdPowerSettingsNew />
+              </div>
+              <span>خروج</span>
+            </div>
+          </button>
         </div>
       </div>
     </div>
@@ -115,92 +130,3 @@ export const Dropdown = ({ submenus, dropdown }) => {
   );
 };
 
-// export const Li = ({ name, icon, onClick, more }) => {
-//   return (
-//     <li className="flex flex-col" onClick={onClick}>
-//       <div className="flex items-center justify-between cursor-pointer  mb-5">
-//         <div className="flex gap-4">
-//           <div className=" w-8 h-8 rounded-1 flex items-center justify-center shadow-[0_3px_6px_rgb(83,108,167,0.16);]">
-//             {icon}
-//           </div>
-//           <span>{name}</span>
-//         </div>
-//         {more}
-//       </div>
-//     </li>
-//   );
-// };
-
-//  {menuItems.map((item) => (
-//               <NavLink to={item.to}>
-//                 <li className="flex flex-col">
-//                   <div className="flex items-center justify-between cursor-pointer  mb-5">
-//                     <div className="flex gap-4">
-//                       <div className=" w-8 h-8 rounded-1 flex items-center justify-center shadow-[0_3px_6px_rgb(83,108,167,0.16);]">
-//                         {item.icon}
-//                       </div>
-//                       <span>{item.title}</span>
-//                     </div>
-//                     {item.iconTwo}
-//                   </div>
-//                 </li>
-//               </NavLink>
-//             ))}
-//             <Link to="/">
-//            <li className="flex items-center gap-4 cursor-pointer mb-5">
-//                 <div className=" w-8 h-8 rounded-1 flex items-center justify-center shadow-[0_3px_6px_rgb(83,108,167,0.16);]">
-//                   <MdSpaceDashboard />
-//                 </div>
-//                 <span>کاربران</span>
-//               </li>
-//               <Li name="داشبورد" icon={<MdSpaceDashboard />} />
-//             </Link>
-//             <Li
-//               name="کاربران"
-//               icon={<MdPeople />}
-//               more={<MdExpandMore size={25} />}
-//               onClick={() => setSubMenu(!subMenu)}
-//             />
-//          <li className="flex flex-col" onClick={() => setSubMenu(!subMenu)}>
-//               <div className="flex items-center justify-between cursor-pointer  mb-5">
-//                 <div className="flex gap-4">
-//                   <div className=" w-8 h-8 rounded-1 flex items-center justify-center shadow-[0_3px_6px_rgb(83,108,167,0.16);]">
-//                     <MdPeople />
-//                   </div>
-//                   <span>کاربران</span>
-//                 </div>
-//                 <MdExpandMore size={25} />
-//               </div>
-//             </li>
-//             <ul className={`mr-5 ${subMenu ? "h-auto" : "hidden"}`}>
-//               <Link to="users">
-//                 <Li name="همه کاربران" icon={<MdPeople />} />
-//               <li className="flex items-center gap-4 cursor-pointer mb-5">
-//                   <div className=" w-8 h-8 rounded-1 flex items-center justify-center shadow-[0_3px_6px_rgb(83,108,167,0.16);]">
-//                     <MdPeople />
-//                   </div>
-//                   <span>همه کاربران</span>
-//                 </li>
-//               </Link>
-//               <Li name="افزودن" icon={<MdPersonAddAlt1 />} />
-//           <li className="flex items-center gap-4 cursor-pointer mb-5">
-//                 <div className=" w-8 h-8 rounded-1 flex items-center justify-center shadow-[0_3px_6px_rgb(83,108,167,0.16);]">
-//                 <MdPersonAddAlt1 />
-//                 </div>
-//                 <span>افزودن</span>
-//               </li>
-//             </ul>
-//             <Li name="سهام داران" icon={<MdGroups />} />
-//             <li className="flex items-center gap-4 cursor-pointer mb-5">
-//               <div className=" w-8 h-8 rounded-1 flex items-center justify-center shadow-[0_3px_6px_rgb(83,108,167,0.16);]">
-//                 <MdGroups />
-//               </div>
-//               <span>سهام داران</span>
-//             </li>
-//             <Li name="خروج" icon={<MdPowerSettingsNew />} />
-//             <li className="flex items-center gap-4 cursor-pointer mb-5">
-//               <div className=" w-8 h-8 rounded-1 flex items-center justify-center shadow-[0_3px_6px_rgb(83,108,167,0.16);]">
-//                 <MdPowerSettingsNew />
-//               </div>
-//               <span>خروج</span>
-//             </li>
