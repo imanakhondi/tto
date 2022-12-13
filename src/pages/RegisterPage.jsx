@@ -71,7 +71,7 @@ const initialValues = {
   sodoor: "",
   codeshenasname: "",
   codemelli: "",
-  tavalod: new DateObject(),
+  tavalod: "",
   mobile: "",
   tellHome: "",
   address: "",
@@ -89,16 +89,9 @@ const initialValues = {
 };
 const RegisterPage = () => {
   const onSubmit = (values) => {
-    if (values.tavalod instanceof DateObject) values.tavalod = values.tavalod.toDate()
-    console.log(values);
-    // console.log(JSON.stringify(values, null, 2));
-  };
-  // const onSubmit = (values, { setSubmitting }) => {
-  //   setTimeout(() => {
-  //     console.log(JSON.stringify(values, null, 2));
-  //     setSubmitting(false);
-  //   }, 400);
-  // }
+    if (values.tavalod instanceof DateObject) values.tavalod = values.tavalod.toString()
+      };
+ 
   const validationSchema = Yup.object({
     name: Yup.string().required("نام ضروری است"),
     family: Yup.string().required("نام خانوادگی ضروری است"),
@@ -210,11 +203,9 @@ const RegisterPage = () => {
           locale={persian_en}
           value={formik.values.tavalod}
           format="YYYY/MM/DD"
-          // onChange={formik.handleChange}
-          // onChange={(date) =>
-            
-          //   formik.setFieldValue("tavalod", date)
-          // }
+         onChange={(event) => {
+            formik.setFieldValue("tavalod",event.toString() );
+          }}
           name="tavalod"
        
         />
